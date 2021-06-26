@@ -35,6 +35,7 @@ public class Extractor {
             try {
                 Document document = Jsoup.connect(URL).get();
                 Elements otherLinks = document.select("a[href]");
+                logger.info("Found (" + otherLinks.size() + ") links");
                 depth++;
                 // Iterate over the links and get the sub links with max depth of 2
                 for (Element page : otherLinks) {

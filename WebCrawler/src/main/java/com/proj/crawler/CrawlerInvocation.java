@@ -68,7 +68,7 @@ public class CrawlerInvocation {
 		// Get the links to search
 		String[] strTokens = crawler.strLinks.split(",");		
 		
-		logger.info("Before invocatio of crawler");
+		logger.info("Before invocation of crawler");
 		
 		for (String strLink : strTokens) {
 			bwc.getPageLinks(strLink, 0,logger);
