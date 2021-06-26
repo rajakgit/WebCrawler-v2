@@ -2,8 +2,8 @@
 
 This project contains Web crawler which will search for word for given URL(s) and stores the result in Output File
 
-Configuration needs to be updated 
-
+**Configuration needs to be updated 
+**
 1. List of URL(s)
 2. Text to search
 3. Stores the search result in Output File
@@ -14,7 +14,7 @@ Depends need to be setup as per below. Ensure below are place artifacts availabl
 3. Copy config.properties and update properties as per local environment. Sample of property file can be referred
 4. Have output.txt file created in the same location as per config.properties
 
-Execution:
+**Execution:**
 java -jar WebCrawler-0.0.1-SNAPSHOT.jar
 
 The result of execution will be stored in output.txt file.
