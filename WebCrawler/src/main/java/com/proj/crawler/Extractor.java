@@ -10,12 +10,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Extractor {
     private static final int MAX_DEPTH = 2;
 	private HashSet<String> links;
     private List<List<String>> articles;
-
+    
     public Extractor() {
         links = new HashSet<String>();
         articles = new ArrayList<List<String>>();
@@ -28,9 +29,9 @@ public class Extractor {
      * @param URL - The URL to search for
      * @param depth - Depth to which need to perform search
      */
-    public void getPageLinks(String URL,int depth) {
+    public void getPageLinks(String URL,int depth,Logger logger) {
         if (!links.contains(URL) && (depth < MAX_DEPTH) && !URL.isEmpty()) {
-        	System.out.println(">> Depth: " + depth + " [" + URL + "]");
+        	logger.info(">> Depth: " + depth + " [" + URL + "]");
             try {
                 Document document = Jsoup.connect(URL).get();
                 Elements otherLinks = document.select("a[href]");
@@ -38,11 +39,11 @@ public class Extractor {
                 // Iterate over the links and get the sub links with max depth of 2
                 for (Element page : otherLinks) {
                     if (links.add(URL)) {
-                        getPageLinks(page.attr("abs:href"), depth);
+                        getPageLinks(page.attr("abs:href"), depth, logger);
                     }
                 }
             } catch (IOException e) {
-                System.err.println(e.getMessage());
+                logger.severe(e.getMessage());
             }
         }
     }
@@ -53,7 +54,7 @@ public class Extractor {
      * 
      * @param strWordSearch - The word to search for in the articles
      */
-    public void getArticles(String strWordSearch) {
+    public void getArticles(String strWordSearch,Logger logger) {
         links.forEach(x -> {
             Document document;
             try {
@@ -70,7 +71,7 @@ public class Extractor {
                     }
                 }
             } catch (IOException e) {
-                System.err.println(e.getMessage());
+                logger.severe(e.getMessage());
             }
         });
     }
@@ -80,7 +81,7 @@ public class Extractor {
      * 
      * @param filename - Filename where the search results are stored
      */    
-    public void writeToFile(String filename) {
+    public void writeToFile(String filename,Logger logger) {
         FileWriter writer;
         try {
             writer = new FileWriter(filename);
@@ -88,7 +89,7 @@ public class Extractor {
                 try {
                     String temp = "- Title: " + a.get(0) + " (link: " + a.get(1) + ")\n";
                     //display to console
-                    System.out.println(temp);
+                    //logger.info(temp);
                     //save to file
                     writer.write(temp);
                 } catch (IOException e) {
@@ -97,17 +98,8 @@ public class Extractor {
             });
             writer.close();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            logger.severe(e.getMessage());
         }
     }
     
-	/*
-	 * public static void main(String[] args) {
-	 * 
-	 * Extractor bwc = new Extractor(); bwc.getPageLinks("http://www.google.com",
-	 * 0); bwc.getArticles("search");
-	 * bwc.writeToFile("C:\\Raja\\Eclipse_work\\WebCrawler\\target\\output.txt");
-	 * 
-	 * }
-	 */
 }
